@@ -37,10 +37,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 .btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary)}
 .btn-outline:hover{background:var(--primary);color:#fff}
 .btn-sm{padding:5px 12px;font-size:13px}
+.btn-xs{padding:3px 8px;font-size:11px;border-radius:4px}
 .btn-text{background:transparent;border:none;color:var(--primary);padding:4px 8px;cursor:pointer;font-size:13px}
 .btn-text:hover{text-decoration:underline}
 .btn-danger{background:var(--danger);color:#fff}
 .btn-danger:hover{opacity:.9}
+.btn-success{background:var(--success);color:#fff}
+.btn-success:hover{opacity:.9}
+.btn-warn{background:#e67e22;color:#fff}
+.btn-warn:hover{opacity:.9}
 
 /* ====== Main Container ====== */
 .container{max-width:1400px;margin:0 auto;padding:24px}
@@ -56,19 +61,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 .stat-info .stat-label{font-size:13px;color:var(--text-secondary)}
 
 /* ====== Toolbar ====== */
-.toolbar{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
-.search-box{flex:1;min-width:200px;position:relative}
+.toolbar{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+.search-box{flex:1;min-width:180px;position:relative}
 .search-box input{width:100%;padding:10px 14px 10px 40px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;transition:border .2s}
 .search-box input:focus{border-color:var(--primary)}
 .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-secondary);font-size:16px}
-.filter-select{padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;background:var(--card-bg);cursor:pointer;min-width:140px}
+.filter-select{padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;background:var(--card-bg);cursor:pointer;min-width:130px}
 .filter-select:focus{border-color:var(--primary)}
 
 /* ====== Student Grid ====== */
 .student-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:24px}
-.student-card{background:var(--card-bg);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);cursor:pointer;transition:all .2s;border:2px solid transparent;position:relative;overflow:hidden}
+.student-card{background:var(--card-bg);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);cursor:pointer;transition:all .2s;border:2px solid transparent;position:relative;overflow:visible}
 .student-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.12);border-color:var(--primary-light)}
-.student-card .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.student-card .card-actions{position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;transition:opacity .2s}
+.student-card:hover .card-actions{opacity:1}
+.card-actions .btn-icon{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .15s}
+.card-actions .btn-icon.edit{background:#dfe6fd;color:var(--primary)}
+.card-actions .btn-icon.edit:hover{background:var(--primary);color:#fff}
+.card-actions .btn-icon.del{background:#fde8e8;color:var(--danger)}
+.card-actions .btn-icon.del:hover{background:var(--danger);color:#fff}
+.student-card .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;padding-right:40px}
 .student-name{font-size:18px;font-weight:700;color:var(--text)}
 .student-course{font-size:12px;color:var(--text-secondary);margin-top:2px}
 .teacher-tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500;color:#fff}
@@ -92,11 +104,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 .drawer-overlay.open{opacity:1;pointer-events:all}
 .drawer{position:fixed;top:0;right:0;width:min(700px,95vw);height:100%;background:var(--card-bg);z-index:201;box-shadow:-4px 0 20px rgba(0,0,0,.15);transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column}
 .drawer.open{transform:translateX(0)}
-.drawer-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-.drawer-header h2{font-size:20px}
+.drawer-header{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.drawer-header h2{font-size:20px;display:flex;align-items:center;gap:10px}
+.drawer-header-actions{display:flex;align-items:center;gap:8px}
 .drawer-close{width:36px;height:36px;border-radius:50%;border:none;background:#f5f6fa;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
 .drawer-close:hover{background:var(--border)}
-.drawer-student-info{padding:12px 24px;border-bottom:1px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--text-secondary);flex-shrink:0}
+.drawer-student-info{padding:12px 24px;border-bottom:1px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--text-secondary);flex-shrink:0}
 .drawer-body{flex:1;overflow-y:auto;padding:20px 24px}
 .drawer-body .empty-state{text-align:center;padding:60px 20px;color:var(--text-secondary)}
 
@@ -122,15 +135,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 /* ====== Modal ====== */
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:300;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
 .modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--card-bg);border-radius:var(--radius);padding:24px;width:min(500px,90vw);max-height:85vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.2)}
-.modal h3{margin-bottom:16px;font-size:18px}
+.modal{background:var(--card-bg);border-radius:var(--radius);padding:24px;width:min(520px,92vw);max-height:85vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.modal.wide{width:min(600px,92vw)}
+.modal h3{margin-bottom:18px;font-size:18px;display:flex;align-items:center;gap:8px}
 .modal .form-group{margin-bottom:14px}
-.modal label{display:block;font-size:13px;font-weight:600;margin-bottom:4px;color:var(--text-secondary)}
-.modal input,.modal select,.modal textarea{width:100%;padding:8px 12px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;font-family:inherit}
+.modal label{display:block;font-size:13px;font-weight:600;margin-bottom:5px;color:var(--text-secondary)}
+.modal input,.modal select,.modal textarea{width:100%;padding:9px 12px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;font-family:inherit}
 .modal input:focus,.modal select:focus,.modal textarea:focus{border-color:var(--primary)}
 .modal textarea{min-height:60px;resize:vertical}
 .modal .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
 .modal .help-text{font-size:12px;color:var(--text-secondary);margin-top:4px}
+.modal .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* Teacher list in modal */
+.teacher-list{margin-top:12px}
+.teacher-list-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#f8f9fa;border-radius:var(--radius-sm);margin-bottom:8px;font-size:14px}
+.teacher-list-item .t-actions{display:flex;gap:6px}
+
+/* Confirm dialog */
+.confirm-box{text-align:center;padding:10px 0}
+.confirm-box .confirm-icon{font-size:48px;margin-bottom:12px}
+.confirm-box p{font-size:15px;margin-bottom:6px;color:var(--text)}
+.confirm-box .confirm-detail{font-size:13px;color:var(--text-secondary)}
 
 /* ====== Toast ====== */
 .toast{position:fixed;top:80px;right:24px;padding:12px 20px;border-radius:var(--radius-sm);color:#fff;font-size:14px;z-index:400;transform:translateX(120%);transition:transform .3s;box-shadow:0 4px 12px rgba(0,0,0,.2)}
@@ -140,7 +166,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 .toast.error{background:var(--danger)}
 
 /* ====== Responsive ====== */
-@media(max-width:768px){.container{padding:12px}.stats-bar{flex-direction:column}.student-grid{grid-template-columns:1fr}}
+@media(max-width:768px){
+  .container{padding:12px}.stats-bar{flex-direction:column}.student-grid{grid-template-columns:1fr}
+  .modal .form-row{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -153,7 +182,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
   </div>
   <div class="header-right">
     <span class="sync-status"><span class="sync-dot ok" id="syncDot"></span> <span id="syncText">数据已就绪</span></span>
-    <button class="btn btn-sm btn-outline" onclick="syncData()" title="从云端拉取最新数据">🔄 同步</button>
+    <button class="btn btn-sm btn-outline" onclick="syncData()" title="推送数据到云端">🔄 同步</button>
+    <button class="btn btn-sm btn-outline" onclick="exportData()" title="下载备份">📥 导出</button>
     <button class="btn btn-sm btn-text" onclick="openSettings()">⚙️ 设置</button>
   </div>
 </div>
@@ -176,7 +206,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
     <select class="filter-select" id="teacherFilter" onchange="renderStudents()">
       <option value="all">全部教师</option>
     </select>
-    <button class="btn btn-sm btn-outline" onclick="renderStudents()" style="padding:10px 14px;">🔃 刷新列表</button>
+    <button class="btn btn-sm btn-success" onclick="openStudentModal()">➕ 添加学员</button>
+    <button class="btn btn-sm btn-outline" onclick="openTeacherManager()">👩‍🏫 管理教师</button>
   </div>
 
   <!-- Student Grid -->
@@ -189,11 +220,86 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 <div class="drawer" id="drawer">
   <div class="drawer-header">
     <h2 id="drawerTitle">学员详情</h2>
-    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    <div class="drawer-header-actions">
+      <button class="btn btn-sm btn-text" onclick="event.stopPropagation();openStudentModal(currentStudent?.id)">✏️ 编辑</button>
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
   </div>
   <div class="drawer-student-info" id="drawerInfo"></div>
   <div class="plan-tabs" id="planTabs" style="margin:0 24px"></div>
   <div class="drawer-body" id="drawerBody"></div>
+</div>
+
+<!-- ========== MODALS ========== -->
+
+<!-- Student Edit/Add Modal -->
+<div class="modal-overlay" id="studentModalOverlay" onclick="closeStudentModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3 id="studentModalTitle">✏️ 编辑学员</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>姓名 *</label>
+        <input type="text" id="stuName" placeholder="学员姓名">
+      </div>
+      <div class="form-group">
+        <label>手机号</label>
+        <input type="text" id="stuPhone" placeholder="手机号码">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>课程</label>
+      <input type="text" id="stuCourse" placeholder="如：27政治英语333教育综合+1v1">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>负责教师</label>
+        <select id="stuTeacher"></select>
+      </div>
+      <div class="form-group">
+        <label>入学日期</label>
+        <input type="date" id="stuEnrollDate">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>备注</label>
+      <textarea id="stuNotes" placeholder="额外备注信息（选填）"></textarea>
+    </div>
+    <div class="btn-row">
+      <span style="flex:1"></span>
+      <button class="btn btn-outline" onclick="closeStudentModal()">取消</button>
+      <button class="btn btn-primary" id="stuSaveBtn" onclick="saveStudent()">💾 保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Teacher Manager Modal -->
+<div class="modal-overlay" id="teacherModalOverlay" onclick="closeTeacherManager()">
+  <div class="modal wide" onclick="event.stopPropagation()">
+    <h3>👩‍🏫 教师管理</h3>
+    <div class="teacher-list" id="teacherList"></div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <input type="text" id="newTeacherName" placeholder="新教师姓名" style="flex:1;padding:9px 12px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none" onkeydown="if(event.key==='Enter')addTeacher()">
+      <button class="btn btn-sm btn-success" onclick="addTeacher()">➕ 添加</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="closeTeacherManager()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="confirmModalOverlay" onclick="closeConfirmModal()">
+  <div class="modal" onclick="event.stopPropagation()" style="width:min(400px,90vw)">
+    <div class="confirm-box">
+      <div class="confirm-icon">⚠️</div>
+      <p><strong id="confirmTitle">确认删除？</strong></p>
+      <p class="confirm-detail" id="confirmDetail"></p>
+    </div>
+    <div class="btn-row" style="justify-content:center">
+      <button class="btn btn-outline" onclick="closeConfirmModal()">取消</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn">🗑️ 确认删除</button>
+    </div>
+  </div>
 </div>
 
 <!-- Settings Modal -->
@@ -215,7 +321,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
     <div class="form-group">
       <label>GitHub Personal Access Token</label>
       <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxx">
-      <div class="help-text">仅用于写入同步时需要。仓库已公开，读取数据无需Token。</div>
+      <div class="help-text">仅用于写入同步。仓库已公开，读取数据无需Token。</div>
     </div>
     <div class="btn-row">
       <button class="btn btn-outline" onclick="closeSettings()">取消</button>
@@ -232,11 +338,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 let state = { members: [], students: [] };
 let currentStudent = null;
 let activePlanTab = 0;
+let editingStudentId = null;
+let pendingDelete = null; // {type:'student'|'teacher', id, name}
 
 const DATA_KEY = 'zhixue_platform_data_v2';
 const CONFIG_KEY = 'ghConfig';
 const RAW_URL = 'https://raw.githubusercontent.com/826sun/study-plan-data/main/data.json';
 const API_URL = 'https://api.github.com/repos/826sun/study-plan-data/contents/data.json';
+
+// ====== UUID ======
+function genId() { return 'ms' + Date.now().toString(36) + Math.random().toString(36).substring(2, 8); }
 
 // ====== Init ======
 document.addEventListener('DOMContentLoaded', () => {
@@ -255,6 +366,7 @@ function loadLocalData() {
     }
   } catch(e) { console.warn('本地数据读取失败', e); }
   if (!state.students) state = { members: [], students: [] };
+  if (!state.members) state.members = [];
   renderAll();
 }
 
@@ -271,41 +383,33 @@ async function fetchRemoteData() {
     const localCount = localData?.students?.length || 0;
     const remoteCount = data.students.length;
 
-    // Merge: remote is source of truth for multi-device collaboration
-    // But preserve local data that hasn't been synced (only if local has MORE students)
     let finalData = data;
     if (localCount > remoteCount && localData) {
-      // Keep local as it has more data (not yet synced) — show warning
       console.warn('本地数据('+localCount+'条)多于云端('+remoteCount+'条)，请推送到云端同步');
       finalData = localData;
     }
 
     state = finalData;
-    localStorage.setItem(DATA_KEY, JSON.stringify(finalData));
+    saveLocal();
     setSyncStatus('ok', `云端同步成功 (${remoteCount}位学员)`);
     renderAll();
   } catch(e) {
     console.error('云端同步失败:', e.message);
-    if (state.students.length > 0) {
-      setSyncStatus('err', '云端连接失败，使用本地缓存');
-    } else {
-      setSyncStatus('err', '无法加载数据，请检查网络');
-    }
+    setSyncStatus(state.students.length > 0 ? 'err' : 'err', state.students.length > 0 ? '云端连接失败，使用本地缓存' : '无法加载数据，请检查网络');
     renderAll();
   }
 }
 
+function saveLocal() {
+  localStorage.setItem(DATA_KEY, JSON.stringify(state));
+}
+
 async function syncData() {
   const cfg = getConfig();
-  if (!cfg.token) {
-    showToast('请先在设置中配置 GitHub Token', 'error');
-    openSettings();
-    return;
-  }
+  if (!cfg.token) { showToast('请先在设置中配置 GitHub Token', 'error'); openSettings(); return; }
 
   setSyncStatus('loading', '正在推送到云端...');
   try {
-    // Get current SHA
     const getResp = await fetch(API_URL, {
       headers: { 'Authorization': 'token ' + cfg.token, 'Accept': 'application/vnd.github.v3+json' }
     });
@@ -313,16 +417,8 @@ async function syncData() {
     const fileInfo = await getResp.json();
     const sha = fileInfo.sha;
 
-    // Push data
     const content = JSON.stringify(state, null, 2);
     const encoded = btoa(unescape(encodeURIComponent(content)));
-    const body = JSON.stringify({
-      message: 'sync: update from platform (' + new Date().toLocaleString('zh-CN') + ')',
-      content: encoded,
-      sha: sha,
-      branch: 'main'
-    });
-
     const putResp = await fetch(API_URL, {
       method: 'PUT',
       headers: {
@@ -330,7 +426,7 @@ async function syncData() {
         'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'application/json'
       },
-      body: body
+      body: JSON.stringify({ message: 'sync: update (' + new Date().toLocaleString('zh-CN') + ')', content: encoded, sha: sha, branch: 'main' })
     });
 
     if (!putResp.ok) {
@@ -338,21 +434,27 @@ async function syncData() {
       throw new Error(err.message || '推送失败');
     }
 
-    setSyncStatus('ok', '推送成功！数据已同步到云端');
+    setSyncStatus('ok', '推送成功！');
     showToast('✅ 同步成功！' + state.students.length + '位学员数据已推送', 'success');
   } catch(e) {
     console.error('同步失败:', e);
-    setSyncStatus('err', '同步失败: ' + e.message);
+    setSyncStatus('err', '同步失败');
     showToast('❌ 同步失败: ' + e.message, 'error');
   }
 }
 
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '知新平台备份_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  showToast('📥 数据备份已下载', 'success');
+}
+
 // ====== Config ======
 function getConfig() {
-  try {
-    const raw = localStorage.getItem(CONFIG_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
+  try { const raw = localStorage.getItem(CONFIG_KEY); if (raw) return JSON.parse(raw); } catch(e) {}
   return { user: '826sun', repo: 'study-plan-data', branch: 'main', token: '' };
 }
 
@@ -376,13 +478,8 @@ function saveSettings() {
   showToast('⚙️ 设置已保存', 'success');
 }
 
-function openSettings() {
-  loadSettings();
-  document.getElementById('settingsOverlay').classList.add('open');
-}
-function closeSettings() {
-  document.getElementById('settingsOverlay').classList.remove('open');
-}
+function openSettings() { loadSettings(); document.getElementById('settingsOverlay').classList.add('open'); }
+function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); }
 
 // ====== Rendering ======
 function renderAll() {
@@ -405,26 +502,21 @@ function renderTeacherFilter() {
   const members = state.members || [];
   const sel = document.getElementById('teacherFilter');
   sel.innerHTML = '<option value="all">全部教师</option>' +
-    members.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+    members.map(m => `<option value="${m.id}">${escHtml(m.name)}</option>`).join('');
 }
 
-function getTeacherName(memberId) {
-  const m = (state.members || []).find(x => x.id === memberId);
-  return m ? m.name : '未分配';
+function getTeacher(memberId) {
+  return (state.members || []).find(x => x.id === memberId) || null;
 }
-function getTeacherColorIdx(memberId) {
-  const m = (state.members || []).find(x => x.id === memberId);
-  return m ? (m.colorIdx || 0) : 0;
-}
+function getTeacherName(memberId) { const m = getTeacher(memberId); return m ? m.name : '未分配'; }
+function getTeacherColorIdx(memberId) { const m = getTeacher(memberId); return m ? (m.colorIdx || 0) : 0; }
 
 function renderStudents() {
   const search = (document.getElementById('searchInput').value || '').toLowerCase();
   const teacherId = document.getElementById('teacherFilter').value;
   let students = state.students || [];
 
-  if (teacherId !== 'all') {
-    students = students.filter(s => s.memberId === teacherId);
-  }
+  if (teacherId !== 'all') students = students.filter(s => s.memberId === teacherId);
   if (search) {
     students = students.filter(s =>
       (s.name || '').toLowerCase().includes(search) ||
@@ -436,11 +528,7 @@ function renderStudents() {
   const grid = document.getElementById('studentGrid');
   const empty = document.getElementById('emptyHint');
 
-  if (students.length === 0) {
-    grid.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
+  if (students.length === 0) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
 
   empty.style.display = 'none';
   grid.innerHTML = students.map(s => {
@@ -448,14 +536,18 @@ function renderStudents() {
     let planLabel = '暂无计划', planClass = 'none';
     if (plans.length > 0) {
       const latest = plans[plans.length - 1];
-      if (latest.status === 'completed') { planLabel = `第${latest.cycleNum}周期 · 已完成`; planClass = 'completed'; }
-      else { planLabel = `第${latest.cycleNum}周期 · 进行中`; planClass = 'active'; }
+      planLabel = latest.status === 'completed' ? `第${latest.cycleNum}周期 · 已完成` : `第${latest.cycleNum}周期 · 进行中`;
+      planClass = latest.status === 'completed' ? 'completed' : 'active';
     }
     const tname = getTeacherName(s.memberId);
     const tcolor = getTeacherColorIdx(s.memberId);
-    const hasExcel = plans.some(p => p.excelUploaded);
+    const hasExcel = plans.some(p => (p.importedFiles || []).length > 0);
     return `
       <div class="student-card" onclick="openStudent('${s.id}')">
+        <div class="card-actions" onclick="event.stopPropagation()">
+          <button class="btn-icon edit" title="编辑学员" onclick="openStudentModal('${s.id}')">✏️</button>
+          <button class="btn-icon del" title="删除学员" onclick="confirmDeleteStudent('${s.id}')">🗑️</button>
+        </div>
         <div class="card-top">
           <div>
             <div class="student-name">${escHtml(s.name)}</div>
@@ -467,6 +559,7 @@ function renderStudents() {
           ${s.phone ? `<span class="meta-item">📱 ${escHtml(s.phone)}</span>` : ''}
           ${s.enrollDate ? `<span class="meta-item">📅 入学 ${escHtml(s.enrollDate)}</span>` : ''}
           ${hasExcel ? '<span class="meta-item">📊 有周计划</span>' : ''}
+          ${s.notes ? `<span class="meta-item">💬 ${escHtml(s.notes.substring(0,20))}${s.notes.length>20?'...':''}</span>` : ''}
         </div>
         <div class="plan-badge ${planClass}">📋 ${planLabel}</div>
       </div>`;
@@ -478,7 +571,7 @@ function openStudent(studentId) {
   currentStudent = (state.students || []).find(s => s.id === studentId);
   if (!currentStudent) return;
 
-  document.getElementById('drawerTitle').textContent = currentStudent.name + ' 的学习计划';
+  document.getElementById('drawerTitle').innerHTML = currentStudent.name + ' 的学习计划';
   const tname = getTeacherName(currentStudent.memberId);
   const tcolor = getTeacherColorIdx(currentStudent.memberId);
   document.getElementById('drawerInfo').innerHTML = `
@@ -488,14 +581,15 @@ function openStudent(studentId) {
     <span>📚 ${escHtml(currentStudent.course || '未填写')}</span>
     ${currentStudent.phone ? `<span>📱 ${escHtml(currentStudent.phone)}</span>` : ''}
     ${currentStudent.enrollDate ? `<span>📅 入学 ${escHtml(currentStudent.enrollDate)}</span>` : ''}
+    ${currentStudent.notes ? `<span>💬 ${escHtml(currentStudent.notes)}</span>` : ''}
   `;
 
+  activePlanTab = Math.max(0, (currentStudent.plans || []).length - 1);
   renderPlanTabs();
   renderPlanContent();
 
   document.getElementById('drawerOverlay').classList.add('open');
   document.getElementById('drawer').classList.add('open');
-  activePlanTab = Math.max(0, (currentStudent.plans || []).length - 1);
   document.body.style.overflow = 'hidden';
 }
 
@@ -510,97 +604,254 @@ function closeDrawer() {
 function renderPlanTabs() {
   const plans = currentStudent?.plans || [];
   const tabs = document.getElementById('planTabs');
-  if (plans.length === 0) {
-    tabs.innerHTML = '<div class="plan-tab active">暂无计划</div>';
-    return;
-  }
+  if (plans.length === 0) { tabs.innerHTML = '<div class="plan-tab active">暂无计划</div>'; return; }
   tabs.innerHTML = plans.map((p, i) => {
     const statusText = p.status === 'completed' ? '✅' : '🔄';
     return `<div class="plan-tab ${i === activePlanTab ? 'active' : ''}" onclick="switchPlanTab(${i})">${statusText} 第${p.cycleNum}周期</div>`;
   }).join('');
 }
 
-function switchPlanTab(idx) {
-  activePlanTab = idx;
-  renderPlanTabs();
-  renderPlanContent();
-}
+function switchPlanTab(idx) { activePlanTab = idx; renderPlanTabs(); renderPlanContent(); }
 
 function renderPlanContent() {
   const body = document.getElementById('drawerBody');
   const plans = currentStudent?.plans || [];
-
   if (plans.length === 0) {
     body.innerHTML = '<div class="empty-state">📋 该学员暂无学习计划<br><span style="font-size:12px;color:var(--text-secondary)">导入每周学习计划 Excel 后，将在此处展示</span></div>';
     return;
   }
-
   const plan = plans[activePlanTab];
   if (!plan) { body.innerHTML = '<div class="empty-state">找不到该周期计划</div>'; return; }
-
   const files = plan.importedFiles || [];
   if (files.length === 0) {
-    body.innerHTML = `<div class="plan-section">
-      <h3>第${plan.cycleNum}周期 <span style="font-size:13px;color:var(--text-secondary);font-weight:400">(${plan.status === 'completed' ? '已完成' : '进行中'})</span></h3>
-      <div class="empty-state" style="padding:20px">📄 该周期暂无导入的学习计划表格</div>
-    </div>`;
+    body.innerHTML = `<div class="plan-section"><h3>第${plan.cycleNum}周期 <span style="font-size:13px;color:var(--text-secondary);font-weight:400">(${plan.status === 'completed' ? '已完成' : '进行中'})</span></h3><div class="empty-state" style="padding:20px">📄 该周期暂无导入的学习计划表格</div></div>`;
     return;
   }
-
   let html = '';
-  files.forEach((f, fi) => {
-    html += `<div class="plan-section">
-      <h3>📊 ${escHtml(f.fileName || '学习计划')} <span style="font-size:11px;color:var(--text-secondary);font-weight:400">${f.importedAt ? '导入于 ' + f.importedAt : ''}</span></h3>
-      <div class="plan-table-wrapper">${renderPlanTable(f.rows || [])}</div>
-    </div>`;
+  files.forEach((f) => {
+    html += `<div class="plan-section"><h3>📊 ${escHtml(f.fileName || '学习计划')} <span style="font-size:11px;color:var(--text-secondary);font-weight:400">${f.importedAt ? '导入于 ' + f.importedAt : ''}</span></h3><div class="plan-table-wrapper">${renderPlanTable(f.rows || [])}</div></div>`;
   });
-
   body.innerHTML = html;
 }
 
 function renderPlanTable(rows) {
   if (!rows || rows.length === 0) return '<p style="color:var(--text-secondary)">无表格数据</p>';
-
   const hasHeader = rows.length > 1 && rows[1] && rows[1].length > 1;
-  const isTitleRow = (r, i) => i === 0 && r && r.length > 0 && !hasHeader;
-
   let html = '<table class="plan-table"><tbody>';
-
   rows.forEach((row, ri) => {
     if (!row || row.length === 0) return;
     html += '<tr>';
-
-    // Title row
     if (ri === 0 && row.length <= 2) {
       html += `<td class="title-row" colspan="${Math.max(row.length, 8)}">${escHtml(row[0] || '')}</td>`;
-    }
-    // Day header row
-    else if (hasHeader && ri === 1) {
+    } else if (hasHeader && ri === 1) {
+      row.forEach(cell => { html += `<td class="col-header">${escHtml(cell || '').replace(/\n/g, '<br>')}</td>`; });
+    } else if (row[0] && /上午|下午|晚上|早餐|晚餐|午休/.test(row[0])) {
+      row.forEach(cell => { html += `<td class="time-label">${escHtml(cell || '').replace(/\n/g, '<br>')}</td>`; });
+    } else {
       row.forEach((cell, ci) => {
-        html += `<td class="col-header">${escHtml(cell || '').replace(/\n/g, '<br>')}</td>`;
-      });
-    }
-    // Time label row (上午/下午/晚上)
-    else if (row[0] && /上午|下午|晚上|早餐|晚餐|午休/.test(row[0])) {
-      row.forEach((cell, ci) => {
-        html += `<td class="time-label">${escHtml(cell || '').replace(/\n/g, '<br>')}</td>`;
-      });
-    }
-    // Content row
-    else {
-      row.forEach((cell, ci) => {
-        if (ci === 0) {
-          html += `<td class="row-header">${escHtml(cell || '')}</td>`;
-        } else {
-          html += `<td class="content-cell">${escHtml(cell || '').replace(/\n/g, '<br>')}</td>`;
-        }
+        html += ci === 0 ? `<td class="row-header">${escHtml(cell || '')}</td>` : `<td class="content-cell">${escHtml(cell || '').replace(/\n/g, '<br>')}</td>`;
       });
     }
     html += '</tr>';
   });
-
   html += '</tbody></table>';
   return html;
+}
+
+// ====== Student CRUD ======
+function openStudentModal(studentId) {
+  editingStudentId = studentId || null;
+  const isEdit = !!studentId;
+  document.getElementById('studentModalTitle').innerHTML = isEdit ? '✏️ 编辑学员' : '➕ 添加学员';
+  document.getElementById('stuSaveBtn').textContent = isEdit ? '💾 保存修改' : '➕ 添加学员';
+
+  // Populate teacher dropdown
+  const sel = document.getElementById('stuTeacher');
+  sel.innerHTML = '<option value="">未分配</option>' +
+    (state.members || []).map(m => `<option value="${m.id}">${escHtml(m.name)}</option>`).join('');
+
+  if (isEdit) {
+    const s = (state.students || []).find(x => x.id === studentId);
+    if (!s) return;
+    document.getElementById('stuName').value = s.name || '';
+    document.getElementById('stuPhone').value = s.phone || '';
+    document.getElementById('stuCourse').value = s.course || '';
+    document.getElementById('stuEnrollDate').value = s.enrollDate || '';
+    document.getElementById('stuNotes').value = s.notes || '';
+    document.getElementById('stuTeacher').value = s.memberId || '';
+  } else {
+    document.getElementById('stuName').value = '';
+    document.getElementById('stuPhone').value = '';
+    document.getElementById('stuCourse').value = '';
+    document.getElementById('stuEnrollDate').value = '';
+    document.getElementById('stuNotes').value = '';
+    document.getElementById('stuTeacher').value = '';
+  }
+
+  document.getElementById('studentModalOverlay').classList.add('open');
+}
+
+function closeStudentModal() {
+  document.getElementById('studentModalOverlay').classList.remove('open');
+  editingStudentId = null;
+}
+
+function saveStudent() {
+  const name = document.getElementById('stuName').value.trim();
+  if (!name) { showToast('请输入学员姓名', 'error'); return; }
+
+  const data = {
+    id: editingStudentId || genId(),
+    name: name,
+    phone: document.getElementById('stuPhone').value.trim(),
+    course: document.getElementById('stuCourse').value.trim(),
+    enrollDate: document.getElementById('stuEnrollDate').value,
+    notes: document.getElementById('stuNotes').value.trim(),
+    memberId: document.getElementById('stuTeacher').value || undefined,
+  };
+
+  if (editingStudentId) {
+    const idx = (state.students || []).findIndex(s => s.id === editingStudentId);
+    if (idx >= 0) {
+      data.plans = state.students[idx].plans || [];
+      data.goal = state.students[idx].goal || '';
+      data.createdAt = state.students[idx].createdAt || new Date().toISOString().slice(0, 10);
+      state.students[idx] = data;
+    }
+  } else {
+    data.plans = [];
+    data.goal = '';
+    data.createdAt = new Date().toISOString().slice(0, 10);
+    if (!state.students) state.students = [];
+    state.students.push(data);
+  }
+
+  saveLocal();
+  closeStudentModal();
+  renderAll();
+  if (currentStudent && currentStudent.id === data.id) {
+    currentStudent = data;
+    renderPlanTabs();
+    renderPlanContent();
+    document.getElementById('drawerInfo').innerHTML = renderStudentDrawerInfo(data);
+  }
+  showToast(editingStudentId ? '✅ 学员信息已更新' : '✅ 新学员已添加', 'success');
+}
+
+function renderStudentDrawerInfo(s) {
+  const tname = getTeacherName(s.memberId);
+  const tcolor = getTeacherColorIdx(s.memberId);
+  return `<span style="display:inline-flex;align-items:center;gap:6px"><span class="teacher-tag c${tcolor}" style="font-size:13px">${escHtml(tname)}</span></span><span>📚 ${escHtml(s.course || '未填写')}</span>${s.phone ? `<span>📱 ${escHtml(s.phone)}</span>` : ''}${s.enrollDate ? `<span>📅 入学 ${escHtml(s.enrollDate)}</span>` : ''}${s.notes ? `<span>💬 ${escHtml(s.notes)}</span>` : ''}`;
+}
+
+function confirmDeleteStudent(studentId) {
+  const s = (state.students || []).find(x => x.id === studentId);
+  if (!s) return;
+  pendingDelete = { type: 'student', id: studentId, name: s.name };
+  document.getElementById('confirmTitle').textContent = '确认删除学员？';
+  document.getElementById('confirmDetail').textContent = `将永久删除「${s.name}」及其所有学习计划数据，此操作不可撤销。`;
+  document.getElementById('confirmDeleteBtn').onclick = deleteStudent;
+  document.getElementById('confirmModalOverlay').classList.add('open');
+}
+
+function deleteStudent() {
+  if (!pendingDelete || pendingDelete.type !== 'student') return;
+  state.students = (state.students || []).filter(s => s.id !== pendingDelete.id);
+  saveLocal();
+  closeConfirmModal();
+  if (currentStudent && currentStudent.id === pendingDelete.id) closeDrawer();
+  renderAll();
+  showToast('🗑️ 学员「' + pendingDelete.name + '」已删除', 'info');
+}
+
+// ====== Teacher CRUD ======
+function openTeacherManager() {
+  renderTeacherList();
+  document.getElementById('teacherModalOverlay').classList.add('open');
+}
+
+function closeTeacherManager() {
+  document.getElementById('teacherModalOverlay').classList.remove('open');
+}
+
+function renderTeacherList() {
+  const members = state.members || [];
+  const list = document.getElementById('teacherList');
+  if (members.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary)">暂无教师，请添加</div>';
+    return;
+  }
+  const colors = ['🔵','🟢','🟠','🟣','🩷','🩵'];
+  list.innerHTML = members.map(m => `
+    <div class="teacher-list-item">
+      <span>${colors[m.colorIdx % 6] || '👤'} <strong>${escHtml(m.name)}</strong> <span style="font-size:12px;color:var(--text-secondary)">· ${(state.students||[]).filter(s=>s.memberId===m.id).length}位学员</span></span>
+      <div class="t-actions">
+        <button class="btn btn-xs btn-text" onclick="renameTeacher('${m.id}')">✏️ 改名</button>
+        <button class="btn btn-xs btn-text" style="color:var(--danger)" onclick="confirmDeleteTeacher('${m.id}')">🗑️ 删除</button>
+      </div>
+    </div>`).join('');
+}
+
+function addTeacher() {
+  const input = document.getElementById('newTeacherName');
+  const name = input.value.trim();
+  if (!name) { showToast('请输入教师姓名', 'error'); return; }
+  if (!state.members) state.members = [];
+  const colorIdx = state.members.length % 6;
+  state.members.push({
+    id: genId(),
+    name: name,
+    role: '教师',
+    colorIdx: colorIdx,
+    createdAt: new Date().toISOString().slice(0, 10)
+  });
+  saveLocal();
+  input.value = '';
+  renderTeacherList();
+  renderAll();
+  showToast('✅ 教师「' + name + '」已添加', 'success');
+}
+
+function renameTeacher(teacherId) {
+  const m = (state.members || []).find(x => x.id === teacherId);
+  if (!m) return;
+  const newName = prompt('修改教师姓名：', m.name);
+  if (newName && newName.trim() && newName.trim() !== m.name) {
+    m.name = newName.trim();
+    saveLocal();
+    renderTeacherList();
+    renderAll();
+    showToast('✅ 教师已更名为「' + m.name + '」', 'success');
+  }
+}
+
+function confirmDeleteTeacher(teacherId) {
+  const m = (state.members || []).find(x => x.id === teacherId);
+  if (!m) return;
+  const count = (state.students || []).filter(s => s.memberId === teacherId).length;
+  pendingDelete = { type: 'teacher', id: teacherId, name: m.name };
+  document.getElementById('confirmTitle').textContent = '确认删除教师？';
+  document.getElementById('confirmDetail').textContent = `将删除「${m.name}」${count > 0 ? '，其负责的 ' + count + ' 位学员将变为「未分配」' : ''}。此操作不可撤销。`;
+  document.getElementById('confirmDeleteBtn').onclick = deleteTeacher;
+  document.getElementById('confirmModalOverlay').classList.add('open');
+}
+
+function deleteTeacher() {
+  if (!pendingDelete || pendingDelete.type !== 'teacher') return;
+  // Unassign students
+  (state.students || []).forEach(s => { if (s.memberId === pendingDelete.id) s.memberId = undefined; });
+  state.members = (state.members || []).filter(m => m.id !== pendingDelete.id);
+  saveLocal();
+  closeConfirmModal();
+  closeTeacherManager();
+  renderAll();
+  showToast('🗑️ 教师「' + pendingDelete.name + '」已删除', 'info');
+}
+
+// ====== Confirm Modal ======
+function closeConfirmModal() {
+  document.getElementById('confirmModalOverlay').classList.remove('open');
+  pendingDelete = null;
 }
 
 // ====== Utilities ======
@@ -622,12 +873,19 @@ function showToast(msg, type) {
   const toast = document.getElementById('toast');
   toast.textContent = msg;
   toast.className = 'toast ' + (type || 'info') + ' show';
-  setTimeout(() => { toast.classList.remove('show'); }, 3000);
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => { toast.classList.remove('show'); }, 3000);
 }
 
-// Keyboard shortcut
+// Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { closeDrawer(); closeSettings(); }
+  if (e.key === 'Escape') {
+    if (pendingDelete) closeConfirmModal();
+    else if (document.getElementById('studentModalOverlay').classList.contains('open')) closeStudentModal();
+    else if (document.getElementById('teacherModalOverlay').classList.contains('open')) closeTeacherManager();
+    else if (document.getElementById('settingsOverlay').classList.contains('open')) closeSettings();
+    else closeDrawer();
+  }
 });
 </script>
 
