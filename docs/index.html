@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知新 · 学员学习计划管理平台</title>
+<style>
+/* ====== Reset & Variables ====== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f6fa;--card-bg:#fff;--text:#2d3436;--text-secondary:#636e72;
+  --primary:#6c5ce7;--primary-light:#a29bfe;--success:#00b894;--warning:#fdcb6e;
+  --danger:#d63031;--border:#dfe6e9;--shadow:0 2px 12px rgba(0,0,0,.08);
+  --radius:12px;--radius-sm:8px;
+  --tag-blue:#74b9ff;--tag-green:#55efc4;--tag-orange:#fab1a0;--tag-purple:#a29bfe;
+  --tag-pink:#fd79a8;--tag-teal:#81ecec;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+
+/* ====== Header ====== */
+.header{background:var(--card-bg);border-bottom:1px solid var(--border);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{font-size:24px}
+.logo-text{font-size:20px;font-weight:700;color:var(--primary);letter-spacing:.5px}
+.header-right{display:flex;align-items:center;gap:12px}
+.sync-status{font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:6px}
+.sync-dot{width:8px;height:8px;border-radius:50%}
+.sync-dot.ok{background:var(--success)}
+.sync-dot.err{background:var(--danger)}
+.sync-dot.loading{background:var(--warning);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ====== Buttons ====== */
+.btn{padding:8px 18px;border-radius:var(--radius-sm);border:none;font-size:14px;cursor:pointer;font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:#5a4bd1;transform:translateY(-1px)}
+.btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary)}
+.btn-outline:hover{background:var(--primary);color:#fff}
+.btn-sm{padding:5px 12px;font-size:13px}
+.btn-text{background:transparent;border:none;color:var(--primary);padding:4px 8px;cursor:pointer;font-size:13px}
+.btn-text:hover{text-decoration:underline}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{opacity:.9}
+
+/* ====== Main Container ====== */
+.container{max-width:1400px;margin:0 auto;padding:24px}
+
+/* ====== Stats Bar ====== */
+.stats-bar{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.stat-card{background:var(--card-bg);border-radius:var(--radius);padding:16px 20px;flex:1;min-width:160px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px}
+.stat-icon{font-size:32px;width:48px;height:48px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center}
+.stat-icon.blue{background:#dfe6fd;color:#6c5ce7}
+.stat-icon.green{background:#d5f5e3;color:#00b894}
+.stat-icon.orange{background:#fdebd0;color:#e67e22}
+.stat-info .stat-value{font-size:24px;font-weight:700}
+.stat-info .stat-label{font-size:13px;color:var(--text-secondary)}
+
+/* ====== Toolbar ====== */
+.toolbar{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+.search-box{flex:1;min-width:200px;position:relative}
+.search-box input{width:100%;padding:10px 14px 10px 40px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;transition:border .2s}
+.search-box input:focus{border-color:var(--primary)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-secondary);font-size:16px}
+.filter-select{padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;background:var(--card-bg);cursor:pointer;min-width:140px}
+.filter-select:focus{border-color:var(--primary)}
+
+/* ====== Student Grid ====== */
+.student-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:24px}
+.student-card{background:var(--card-bg);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);cursor:pointer;transition:all .2s;border:2px solid transparent;position:relative;overflow:hidden}
+.student-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.12);border-color:var(--primary-light)}
+.student-card .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.student-name{font-size:18px;font-weight:700;color:var(--text)}
+.student-course{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.teacher-tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500;color:#fff}
+.teacher-tag.c0{background:var(--tag-blue)}
+.teacher-tag.c1{background:var(--tag-green)}
+.teacher-tag.c2{background:var(--tag-orange)}
+.teacher-tag.c3{background:var(--tag-purple)}
+.teacher-tag.c4{background:var(--tag-pink)}
+.teacher-tag.c5{background:var(--tag-teal)}
+
+.card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.meta-item{font-size:12px;color:var(--text-secondary);background:#f5f6fa;padding:3px 8px;border-radius:4px}
+.plan-badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;margin-top:8px;padding:4px 10px;border-radius:20px;font-weight:500}
+.plan-badge.active{background:#d5f5e3;color:#006837}
+.plan-badge.pending{background:#fef9e7;color:#7d6608}
+.plan-badge.completed{background:#eaf2f8;color:#1b4f72}
+.plan-badge.none{background:#f5f6fa;color:var(--text-secondary)}
+
+/* ====== Drawer ====== */
+.drawer-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s}
+.drawer-overlay.open{opacity:1;pointer-events:all}
+.drawer{position:fixed;top:0;right:0;width:min(700px,95vw);height:100%;background:var(--card-bg);z-index:201;box-shadow:-4px 0 20px rgba(0,0,0,.15);transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column}
+.drawer.open{transform:translateX(0)}
+.drawer-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.drawer-header h2{font-size:20px}
+.drawer-close{width:36px;height:36px;border-radius:50%;border:none;background:#f5f6fa;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.drawer-close:hover{background:var(--border)}
+.drawer-student-info{padding:12px 24px;border-bottom:1px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--text-secondary);flex-shrink:0}
+.drawer-body{flex:1;overflow-y:auto;padding:20px 24px}
+.drawer-body .empty-state{text-align:center;padding:60px 20px;color:var(--text-secondary)}
+
+/* ====== Plan Tabs ====== */
+.plan-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:16px;flex-shrink:0}
+.plan-tab{padding:10px 20px;cursor:pointer;border:none;background:transparent;font-size:14px;font-weight:500;color:var(--text-secondary);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
+.plan-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.plan-tab:hover{color:var(--primary)}
+
+/* ====== Plan Table ====== */
+.plan-section{margin-bottom:16px}
+.plan-section h3{font-size:16px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.plan-table-wrapper{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-sm)}
+.plan-table{border-collapse:collapse;width:100%;font-size:12px;min-width:600px}
+.plan-table td,.plan-table th{border:1px solid var(--border);padding:6px 8px;vertical-align:top;min-width:80px}
+.plan-table .row-header{background:#f0effb;font-weight:600;text-align:center;white-space:nowrap;min-width:60px}
+.plan-table .col-header{background:#f0effb;font-weight:600;text-align:center}
+.plan-table .title-row{background:var(--primary);color:#fff;font-weight:700;text-align:center;font-size:14px}
+.plan-table .time-label{background:#f8f9fa;font-weight:500;text-align:center;white-space:nowrap}
+.plan-table .content-cell{line-height:1.5;white-space:pre-wrap}
+.plan-table .break-cell{background:#f8f9fa;text-align:center;color:var(--text-secondary);font-size:11px}
+
+/* ====== Modal ====== */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:300;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--card-bg);border-radius:var(--radius);padding:24px;width:min(500px,90vw);max-height:85vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.modal h3{margin-bottom:16px;font-size:18px}
+.modal .form-group{margin-bottom:14px}
+.modal label{display:block;font-size:13px;font-weight:600;margin-bottom:4px;color:var(--text-secondary)}
+.modal input,.modal select,.modal textarea{width:100%;padding:8px 12px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;font-family:inherit}
+.modal input:focus,.modal select:focus,.modal textarea:focus{border-color:var(--primary)}
+.modal textarea{min-height:60px;resize:vertical}
+.modal .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.modal .help-text{font-size:12px;color:var(--text-secondary);margin-top:4px}
+
+/* ====== Toast ====== */
+.toast{position:fixed;top:80px;right:24px;padding:12px 20px;border-radius:var(--radius-sm);color:#fff;font-size:14px;z-index:400;transform:translateX(120%);transition:transform .3s;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.toast.show{transform:translateX(0)}
+.toast.info{background:var(--primary)}
+.toast.success{background:var(--success)}
+.toast.error{background:var(--danger)}
+
+/* ====== Responsive ====== */
+@media(max-width:768px){.container{padding:12px}.stats-bar{flex-direction:column}.student-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <span class="logo">📚</span>
+    <span class="logo-text">知新 · 学员学习计划管理</span>
+  </div>
+  <div class="header-right">
+    <span class="sync-status"><span class="sync-dot ok" id="syncDot"></span> <span id="syncText">数据已就绪</span></span>
+    <button class="btn btn-sm btn-outline" onclick="syncData()" title="从云端拉取最新数据">🔄 同步</button>
+    <button class="btn btn-sm btn-text" onclick="openSettings()">⚙️ 设置</button>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div class="container">
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-icon blue">👨‍🎓</div><div class="stat-info"><div class="stat-value" id="statStudents">-</div><div class="stat-label">学员总数</div></div></div>
+    <div class="stat-card"><div class="stat-icon green">👩‍🏫</div><div class="stat-info"><div class="stat-value" id="statTeachers">-</div><div class="stat-label">负责教师</div></div></div>
+    <div class="stat-card"><div class="stat-icon orange">📋</div><div class="stat-info"><div class="stat-value" id="statPlans">-</div><div class="stat-label">学习计划周期</div></div></div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="搜索学员姓名、课程..." oninput="renderStudents()">
+    </div>
+    <select class="filter-select" id="teacherFilter" onchange="renderStudents()">
+      <option value="all">全部教师</option>
+    </select>
+    <button class="btn btn-sm btn-outline" onclick="renderStudents()" style="padding:10px 14px;">🔃 刷新列表</button>
+  </div>
+
+  <!-- Student Grid -->
+  <div class="student-grid" id="studentGrid"></div>
+  <div style="text-align:center;padding:40px;color:var(--text-secondary);display:none" id="emptyHint">没有找到匹配的学员</div>
+</div>
+
+<!-- Student Detail Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <h2 id="drawerTitle">学员详情</h2>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-student-info" id="drawerInfo"></div>
+  <div class="plan-tabs" id="planTabs" style="margin:0 24px"></div>
+  <div class="drawer-body" id="drawerBody"></div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsOverlay" onclick="closeSettings()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>⚙️ 云端同步设置</h3>
+    <div class="form-group">
+      <label>GitHub 用户名</label>
+      <input type="text" id="cfgUser" placeholder="826sun">
+    </div>
+    <div class="form-group">
+      <label>仓库名</label>
+      <input type="text" id="cfgRepo" placeholder="study-plan-data">
+    </div>
+    <div class="form-group">
+      <label>分支</label>
+      <input type="text" id="cfgBranch" placeholder="main">
+    </div>
+    <div class="form-group">
+      <label>GitHub Personal Access Token</label>
+      <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxx">
+      <div class="help-text">仅用于写入同步时需要。仓库已公开，读取数据无需Token。</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="closeSettings()">取消</button>
+      <button class="btn btn-primary" onclick="saveSettings()">💾 保存设置</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ====== State ======
+let state = { members: [], students: [] };
+let currentStudent = null;
+let activePlanTab = 0;
+
+const DATA_KEY = 'zhixue_platform_data_v2';
+const CONFIG_KEY = 'ghConfig';
+const RAW_URL = 'https://raw.githubusercontent.com/826sun/study-plan-data/main/data.json';
+const API_URL = 'https://api.github.com/repos/826sun/study-plan-data/contents/data.json';
+
+// ====== Init ======
+document.addEventListener('DOMContentLoaded', () => {
+  loadLocalData();
+  loadSettings();
+  fetchRemoteData();
+});
+
+// ====== Data Loading ======
+function loadLocalData() {
+  try {
+    const raw = localStorage.getItem(DATA_KEY);
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data.students) state = data;
+    }
+  } catch(e) { console.warn('本地数据读取失败', e); }
+  if (!state.students) state = { members: [], students: [] };
+  renderAll();
+}
+
+async function fetchRemoteData() {
+  setSyncStatus('loading', '正在从云端拉取数据...');
+  try {
+    const resp = await fetch(RAW_URL + '?t=' + Date.now());
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    if (!data.students) throw new Error('数据格式异常');
+
+    const localStr = localStorage.getItem(DATA_KEY);
+    const localData = localStr ? JSON.parse(localStr) : null;
+    const localCount = localData?.students?.length || 0;
+    const remoteCount = data.students.length;
+
+    // Merge: remote is source of truth for multi-device collaboration
+    // But preserve local data that hasn't been synced (only if local has MORE students)
+    let finalData = data;
+    if (localCount > remoteCount && localData) {
+      // Keep local as it has more data (not yet synced) — show warning
+      console.warn('本地数据('+localCount+'条)多于云端('+remoteCount+'条)，请推送到云端同步');
+      finalData = localData;
+    }
+
+    state = finalData;
+    localStorage.setItem(DATA_KEY, JSON.stringify(finalData));
+    setSyncStatus('ok', `云端同步成功 (${remoteCount}位学员)`);
+    renderAll();
+  } catch(e) {
+    console.error('云端同步失败:', e.message);
+    if (state.students.length > 0) {
+      setSyncStatus('err', '云端连接失败，使用本地缓存');
+    } else {
+      setSyncStatus('err', '无法加载数据，请检查网络');
+    }
+    renderAll();
+  }
+}
+
+async function syncData() {
+  const cfg = getConfig();
+  if (!cfg.token) {
+    showToast('请先在设置中配置 GitHub Token', 'error');
+    openSettings();
+    return;
+  }
+
+  setSyncStatus('loading', '正在推送到云端...');
+  try {
+    // Get current SHA
+    const getResp = await fetch(API_URL, {
+      headers: { 'Authorization': 'token ' + cfg.token, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (!getResp.ok) throw new Error('获取文件信息失败');
+    const fileInfo = await getResp.json();
+    const sha = fileInfo.sha;
+
+    // Push data
+    const content = JSON.stringify(state, null, 2);
+    const encoded = btoa(unescape(encodeURIComponent(content)));
+    const body = JSON.stringify({
+      message: 'sync: update from platform (' + new Date().toLocaleString('zh-CN') + ')',
+      content: encoded,
+      sha: sha,
+      branch: 'main'
+    });
+
+    const putResp = await fetch(API_URL, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'token ' + cfg.token,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: body
+    });
+
+    if (!putResp.ok) {
+      const err = await putResp.json();
+      throw new Error(err.message || '推送失败');
+    }
+
+    setSyncStatus('ok', '推送成功！数据已同步到云端');
+    showToast('✅ 同步成功！' + state.students.length + '位学员数据已推送', 'success');
+  } catch(e) {
+    console.error('同步失败:', e);
+    setSyncStatus('err', '同步失败: ' + e.message);
+    showToast('❌ 同步失败: ' + e.message, 'error');
+  }
+}
+
+// ====== Config ======
+function getConfig() {
+  try {
+    const raw = localStorage.getItem(CONFIG_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { user: '826sun', repo: 'study-plan-data', branch: 'main', token: '' };
+}
+
+function loadSettings() {
+  const cfg = getConfig();
+  document.getElementById('cfgUser').value = cfg.user || '826sun';
+  document.getElementById('cfgRepo').value = cfg.repo || 'study-plan-data';
+  document.getElementById('cfgBranch').value = cfg.branch || 'main';
+  document.getElementById('cfgToken').value = cfg.token || '';
+}
+
+function saveSettings() {
+  const cfg = {
+    user: document.getElementById('cfgUser').value.trim(),
+    repo: document.getElementById('cfgRepo').value.trim(),
+    branch: document.getElementById('cfgBranch').value.trim(),
+    token: document.getElementById('cfgToken').value.trim()
+  };
+  localStorage.setItem(CONFIG_KEY, JSON.stringify(cfg));
+  closeSettings();
+  showToast('⚙️ 设置已保存', 'success');
+}
+
+function openSettings() {
+  loadSettings();
+  document.getElementById('settingsOverlay').classList.add('open');
+}
+function closeSettings() {
+  document.getElementById('settingsOverlay').classList.remove('open');
+}
+
+// ====== Rendering ======
+function renderAll() {
+  renderStats();
+  renderTeacherFilter();
+  renderStudents();
+}
+
+function renderStats() {
+  const students = state.students || [];
+  const members = state.members || [];
+  let totalPlans = 0;
+  students.forEach(s => { totalPlans += (s.plans || []).length; });
+  document.getElementById('statStudents').textContent = students.length;
+  document.getElementById('statTeachers').textContent = members.length;
+  document.getElementById('statPlans').textContent = totalPlans;
+}
+
+function renderTeacherFilter() {
+  const members = state.members || [];
+  const sel = document.getElementById('teacherFilter');
+  sel.innerHTML = '<option value="all">全部教师</option>' +
+    members.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+}
+
+function getTeacherName(memberId) {
+  const m = (state.members || []).find(x => x.id === memberId);
+  return m ? m.name : '未分配';
+}
+function getTeacherColorIdx(memberId) {
+  const m = (state.members || []).find(x => x.id === memberId);
+  return m ? (m.colorIdx || 0) : 0;
+}
+
+function renderStudents() {
+  const search = (document.getElementById('searchInput').value || '').toLowerCase();
+  const teacherId = document.getElementById('teacherFilter').value;
+  let students = state.students || [];
+
+  if (teacherId !== 'all') {
+    students = students.filter(s => s.memberId === teacherId);
+  }
+  if (search) {
+    students = students.filter(s =>
+      (s.name || '').toLowerCase().includes(search) ||
+      (s.course || '').toLowerCase().includes(search) ||
+      getTeacherName(s.memberId).toLowerCase().includes(search)
+    );
+  }
+
+  const grid = document.getElementById('studentGrid');
+  const empty = document.getElementById('emptyHint');
+
+  if (students.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+
+  empty.style.display = 'none';
+  grid.innerHTML = students.map(s => {
+    const plans = s.plans || [];
+    let planLabel = '暂无计划', planClass = 'none';
+    if (plans.length > 0) {
+      const latest = plans[plans.length - 1];
+      if (latest.status === 'completed') { planLabel = `第${latest.cycleNum}周期 · 已完成`; planClass = 'completed'; }
+      else { planLabel = `第${latest.cycleNum}周期 · 进行中`; planClass = 'active'; }
+    }
+    const tname = getTeacherName(s.memberId);
+    const tcolor = getTeacherColorIdx(s.memberId);
+    const hasExcel = plans.some(p => p.excelUploaded);
+    return `
+      <div class="student-card" onclick="openStudent('${s.id}')">
+        <div class="card-top">
+          <div>
+            <div class="student-name">${escHtml(s.name)}</div>
+            <div class="student-course">${escHtml(s.course || '未填写课程')}</div>
+          </div>
+          <span class="teacher-tag c${tcolor}">${escHtml(tname)}</span>
+        </div>
+        <div class="card-meta">
+          ${s.phone ? `<span class="meta-item">📱 ${escHtml(s.phone)}</span>` : ''}
+          ${s.enrollDate ? `<span class="meta-item">📅 入学 ${escHtml(s.enrollDate)}</span>` : ''}
+          ${hasExcel ? '<span class="meta-item">📊 有周计划</span>' : ''}
+        </div>
+        <div class="plan-badge ${planClass}">📋 ${planLabel}</div>
+      </div>`;
+  }).join('');
+}
+
+// ====== Student Detail Drawer ======
+function openStudent(studentId) {
+  currentStudent = (state.students || []).find(s => s.id === studentId);
+  if (!currentStudent) return;
+
+  document.getElementById('drawerTitle').textContent = currentStudent.name + ' 的学习计划';
+  const tname = getTeacherName(currentStudent.memberId);
+  const tcolor = getTeacherColorIdx(currentStudent.memberId);
+  document.getElementById('drawerInfo').innerHTML = `
+    <span style="display:inline-flex;align-items:center;gap:6px">
+      <span class="teacher-tag c${tcolor}" style="font-size:13px">${escHtml(tname)}</span>
+    </span>
+    <span>📚 ${escHtml(currentStudent.course || '未填写')}</span>
+    ${currentStudent.phone ? `<span>📱 ${escHtml(currentStudent.phone)}</span>` : ''}
+    ${currentStudent.enrollDate ? `<span>📅 入学 ${escHtml(currentStudent.enrollDate)}</span>` : ''}
+  `;
+
+  renderPlanTabs();
+  renderPlanContent();
+
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  activePlanTab = Math.max(0, (currentStudent.plans || []).length - 1);
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.body.style.overflow = '';
+  currentStudent = null;
+  activePlanTab = 0;
+}
+
+function renderPlanTabs() {
+  const plans = currentStudent?.plans || [];
+  const tabs = document.getElementById('planTabs');
+  if (plans.length === 0) {
+    tabs.innerHTML = '<div class="plan-tab active">暂无计划</div>';
+    return;
+  }
+  tabs.innerHTML = plans.map((p, i) => {
+    const statusText = p.status === 'completed' ? '✅' : '🔄';
+    return `<div class="plan-tab ${i === activePlanTab ? 'active' : ''}" onclick="switchPlanTab(${i})">${statusText} 第${p.cycleNum}周期</div>`;
+  }).join('');
+}
+
+function switchPlanTab(idx) {
+  activePlanTab = idx;
+  renderPlanTabs();
+  renderPlanContent();
+}
+
+function renderPlanContent() {
+  const body = document.getElementById('drawerBody');
+  const plans = currentStudent?.plans || [];
+
+  if (plans.length === 0) {
+    body.innerHTML = '<div class="empty-state">📋 该学员暂无学习计划<br><span style="font-size:12px;color:var(--text-secondary)">导入每周学习计划 Excel 后，将在此处展示</span></div>';
+    return;
+  }
+
+  const plan = plans[activePlanTab];
+  if (!plan) { body.innerHTML = '<div class="empty-state">找不到该周期计划</div>'; return; }
+
+  const files = plan.importedFiles || [];
+  if (files.length === 0) {
+    body.innerHTML = `<div class="plan-section">
+      <h3>第${plan.cycleNum}周期 <span style="font-size:13px;color:var(--text-secondary);font-weight:400">(${plan.status === 'completed' ? '已完成' : '进行中'})</span></h3>
+      <div class="empty-state" style="padding:20px">📄 该周期暂无导入的学习计划表格</div>
+    </div>`;
+    return;
+  }
+
+  let html = '';
+  files.forEach((f, fi) => {
+    html += `<div class="plan-section">
+      <h3>📊 ${escHtml(f.fileName || '学习计划')} <span style="font-size:11px;color:var(--text-secondary);font-weight:400">${f.importedAt ? '导入于 ' + f.importedAt : ''}</span></h3>
+      <div class="plan-table-wrapper">${renderPlanTable(f.rows || [])}</div>
+    </div>`;
+  });
+
+  body.innerHTML = html;
+}
+
+function renderPlanTable(rows) {
+  if (!rows || rows.length === 0) return '<p style="color:var(--text-secondary)">无表格数据</p>';
+
+  const hasHeader = rows.length > 1 && rows[1] && rows[1].length > 1;
+  const isTitleRow = (r, i) => i === 0 && r && r.length > 0 && !hasHeader;
+
+  let html = '<table class="plan-table"><tbody>';
+
+  rows.forEach((row, ri) => {
+    if (!row || row.length === 0) return;
+    html += '<tr>';
+
+    // Title row
+    if (ri === 0 && row.length <= 2) {
+      html += `<td class="title-row" colspan="${Math.max(row.length, 8)}">${escHtml(row[0] || '')}</td>`;
+    }
+    // Day header row
+    else if (hasHeader && ri === 1) {
+      row.forEach((cell, ci) => {
+        html += `<td class="col-header">${escHtml(cell || '').replace(/\n/g, '<br>')}</td>`;
+      });
+    }
+    // Time label row (上午/下午/晚上)
+    else if (row[0] && /上午|下午|晚上|早餐|晚餐|午休/.test(row[0])) {
+      row.forEach((cell, ci) => {
+        html += `<td class="time-label">${escHtml(cell || '').replace(/\n/g, '<br>')}</td>`;
+      });
+    }
+    // Content row
+    else {
+      row.forEach((cell, ci) => {
+        if (ci === 0) {
+          html += `<td class="row-header">${escHtml(cell || '')}</td>`;
+        } else {
+          html += `<td class="content-cell">${escHtml(cell || '').replace(/\n/g, '<br>')}</td>`;
+        }
+      });
+    }
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  return html;
+}
+
+// ====== Utilities ======
+function escHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function setSyncStatus(status, text) {
+  const dot = document.getElementById('syncDot');
+  const textEl = document.getElementById('syncText');
+  dot.className = 'sync-dot ' + status;
+  textEl.textContent = text;
+}
+
+function showToast(msg, type) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast ' + (type || 'info') + ' show';
+  setTimeout(() => { toast.classList.remove('show'); }, 3000);
+}
+
+// Keyboard shortcut
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closeDrawer(); closeSettings(); }
+});
+</script>
+
+</body>
+</html>
